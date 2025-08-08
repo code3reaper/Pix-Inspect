@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Product</title>
+    <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h2>Upload Product</h2>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+        <label for="title">Product Title:</label>
+        <input type="text" id="title" name="title" required>
+        <br>
+        <label for="cost">Product Cost:</label>
+        <input type="text" id="cost" name="cost" required>
+        <br>
+        <label for="image">Product Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <br>
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="color" readonly>
+        <br>
+        <label for="resolution">Image Resolution:</label>
+        <input type="text" id="resolution" name="resolution" readonly>
+        <br>
+        <input type="hidden" id="image_filename" name="image_filename">
+        <button type="submit">Submit</button>
+    </form>
+    <div class="result" id="result" style="display:none;">
+        <h3>Product Details</h3>
+        <p>Automated Color Name: <span id="color_name"></span></p>
+        <p>Resolution Quality: <span id="resolution_quality"></span></p>
+        <button id="uploadAnother">Add More</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#image').on('change', function() {
+                var formData = new FormData($('#uploadForm')[0]);
+                $.ajax({
+                    url: '/process_image',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            $('#color').val(data.color_name);
+                            $('#resolution').val(data.resolution_quality);
+                            $('#image_filename').val(data.image_filename);
+                        }
+                    }
+                });
+            });
+
+            $('#uploadForm').on('submit', function(event) {
+                event.preventDefault();
+                var formData = $(this).serializeArray();
+                $.post('/upload', formData, function(response) {
+                    if (response.success) {
+                        $('#color_name').text($('#color').val());
+                        $('#resolution_quality').text($('#resolution').val());
+                        $('#result').show();
+                        $('#uploadForm').hide();
+                    } else {
+                        alert('Failed to save product details.');
+                    }
+                });
+            });
+
+            $('#uploadAnother').on('click', function() {
+                $('#result').hide();
+                $('#uploadForm').show();
+                $('#uploadForm')[0].reset();
+            });
+        });
+    </script>
+</body>
+</html>
