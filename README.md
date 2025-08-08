@@ -1,6 +1,6 @@
 # PixInspect
 
-This is the project that is a solution for the problem statement: **"Image correctness of product on e-marketplaces"**.
+This is the project that is a solution for the problem statement: **"Image correctness of product on e-marketplace"**.
 
 ## Project Overview
 
@@ -52,3 +52,4 @@ PixInspect matches the product description on the basis of color and type of pro
 **Note:**
 - Make sure to replace the Vision API key path with your own credentials.
 - Never upload your API key to GitHub or share it publicly. 
+
