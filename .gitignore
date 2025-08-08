@@ -1,0 +1,10 @@
+# Ignore Google Vision API key and other sensitive files
+*.json
+# Ignore Python cache and environment files
+__pycache__/
+*.pyc
+.env
+uploads/
+product_data.csv
+
+/woven-framework-408118-57e3b8267c35.json
